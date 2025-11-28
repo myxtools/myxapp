@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Gerir Utilizadores - MyXAPP{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Gerir Utilizadores</h2>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Estado</th>
+                                <th>Apps com Permissão</th>
+                                <th>Registado em</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    {% if user.role == 'admin' %}
+                                        <span class="badge bg-danger">Admin</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">User</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user.is_active %}
+                                        <span class="badge bg-success">Ativo</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Inativo</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ user.permissions|length }}</span>
+                                </td>
+                                <td>{{ user.created_at.strftime('%d/%m/%Y') }}</td>
+                                <td>
+                                    <a href="{{ url_for('admin.user_permissions', user_id=user.id) }}" 
+                                       class="btn btn-sm btn-primary" title="Gerir Permissões">
+                                        🔑 Permissões
+                                    </a>
+                                    
+                                    {% if user.id != session.user_id %}
+                                    <form method="POST" 
+                                          action="{{ url_for('admin.toggle_user_active', user_id=user.id) }}" 
+                                          style="display: inline;">
+                                        <button type="submit" class="btn btn-sm btn-warning" title="Ativar/Desativar">
+                                            {% if user.is_active %}🔒{% else %}🔓{% endif %}
+                                        </button>
+                                    </form>
+                                    
+                                    <form method="POST" 
+                                          action="{{ url_for('admin.delete_user', user_id=user.id) }}" 
+                                          style="display: inline;"
+                                          onsubmit="return confirm('Tem certeza que deseja apagar este utilizador?');">
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Apagar">
+                                            🗑️
+                                        </button>
+                                    </form>
+                                    {% else %}
+                                    <span class="badge bg-info">Você</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">Voltar ao Dashboard</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Gerir Permissões - MyXAPP{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Gerir Permissões</h2>
+        <p class="lead">Utilizador: <strong>{{ user.email }}</strong></p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Selecionar Apps</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('admin.user_permissions', user_id=user.id) }}">
+                    {% if all_apps %}
+                        {% for app in all_apps %}
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" 
+                                   type="checkbox" 
+                                   name="apps" 
+                                   value="{{ app.id }}" 
+                                   id="app{{ app.id }}"
+                                   {% if app.id in user_app_ids %}checked{% endif %}>
+                            <label class="form-check-label" for="app{{ app.id }}">
+                                <strong>{{ app.name }}</strong>
+                                <br>
+                                <small class="text-muted">{{ app.description }}</small>
+                            </label>
+                        </div>
+                        {% endfor %}
+                        
+                        <hr class="my-4">
+                        
+                        <button type="submit" class="btn btn-primary">Guardar Permissões</button>
+                        <a href="{{ url_for('admin.users') }}" class="btn btn-secondary">Cancelar</a>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            Não existem apps disponíveis no sistema.
+                        </div>
+                        <a href="{{ url_for('admin.users') }}" class="btn btn-secondary">Voltar</a>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Informação</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Role:</strong> 
+                    {% if user.role == 'admin' %}
+                        <span class="badge bg-danger">Admin</span>
+                    {% else %}
+                        <span class="badge bg-secondary">User</span>
+                    {% endif %}
+                </p>
+                <p><strong>Estado:</strong> 
+                    {% if user.is_active %}
+                        <span class="badge bg-success">Ativo</span>
+                    {% else %}
+                        <span class="badge bg-danger">Inativo</span>
+                    {% endif %}
+                </p>
+                <p><strong>Apps atuais:</strong> {{ user_app_ids|length }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

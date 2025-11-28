@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - MyXAPP{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Dashboard</h2>
+        <p class="lead">Bem-vindo, {{ user.email }}!</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <h4 class="mb-3">As Suas Aplicações</h4>
+        
+        {% if apps %}
+            <div class="row">
+                {% for app in apps %}
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ app.name }}</h5>
+                            <p class="card-text">{{ app.description }}</p>
+                            <a href="{{ app.route }}" class="btn btn-primary">Abrir App</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <p class="mb-0">Não tem acesso a nenhuma aplicação no momento.</p>
+                <p class="mb-0 mt-2">Contacte o administrador para obter permissões.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
