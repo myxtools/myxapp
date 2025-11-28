@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask import Blueprint, render_template, redirect, url_for, flash, request, session
 from models import db, User
 from functools import wraps
@@ -90,7 +91,8 @@ def change_password():
         new_password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_password')
         
-        user = User.query.get(session['user_id'])
+        # CORRIGIDO: Usar db.session.get() em vez de User.query.get()
+        user = db.session.get(User, session['user_id'])
         
         # Verificar password atual
         if not user.check_password(current_password):

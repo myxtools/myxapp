@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask import Flask, render_template, redirect, url_for, flash, session, request
 from config import Config
 from models import db, bcrypt, User, App, Permission
@@ -34,7 +35,8 @@ def index():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    user = User.query.get(session['user_id'])
+    # CORRIGIDO: Usar db.session.get() em vez de User.query.get()
+    user = db.session.get(User, session['user_id'])
     
     if user.role == 'admin':
         apps = App.query.filter_by(is_active=True).all()

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask import Blueprint, render_template, redirect, url_for, flash, request, session
 from models import db, User, App, Permission
 from functools import wraps
@@ -11,7 +12,8 @@ def admin_required(f):
             flash('Por favor, faça login.', 'warning')
             return redirect(url_for('auth.login'))
         
-        user = User.query.get(session['user_id'])
+        # CORRIGIDO: Usar db.session.get() em vez de User.query.get()
+        user = db.session.get(User, session['user_id'])
         if not user or user.role != 'admin':
             flash('Acesso negado. Apenas administradores.', 'danger')
             return redirect(url_for('dashboard'))
@@ -43,7 +45,12 @@ def users():
 @admin_bp.route('/users/<int:user_id>/permissions', methods=['GET', 'POST'])
 @admin_required
 def user_permissions(user_id):
-    user = User.query.get_or_404(user_id)
+    # CORRIGIDO: Usar db.session.get() com or_404
+    user = db.session.get(User, user_id)
+    if not user:
+        flash('Utilizador não encontrado.', 'danger')
+        return redirect(url_for('admin.users'))
+    
     all_apps = App.query.filter_by(is_active=True).all()
     
     if request.method == 'POST':
@@ -70,7 +77,11 @@ def user_permissions(user_id):
 @admin_bp.route('/users/<int:user_id>/toggle-active', methods=['POST'])
 @admin_required
 def toggle_user_active(user_id):
-    user = User.query.get_or_404(user_id)
+    # CORRIGIDO: Usar db.session.get() com verificação manual
+    user = db.session.get(User, user_id)
+    if not user:
+        flash('Utilizador não encontrado.', 'danger')
+        return redirect(url_for('admin.users'))
     
     if user.id == session['user_id']:
         flash('Não pode desativar a sua própria conta.', 'danger')
@@ -87,7 +98,11 @@ def toggle_user_active(user_id):
 @admin_bp.route('/users/<int:user_id>/delete', methods=['POST'])
 @admin_required
 def delete_user(user_id):
-    user = User.query.get_or_404(user_id)
+    # CORRIGIDO: Usar db.session.get() com verificação manual
+    user = db.session.get(User, user_id)
+    if not user:
+        flash('Utilizador não encontrado.', 'danger')
+        return redirect(url_for('admin.users'))
     
     if user.id == session['user_id']:
         flash('Não pode apagar a sua própria conta.', 'danger')
