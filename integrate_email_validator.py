@@ -1,4 +1,19 @@
 # -*- coding: utf-8 -*-
+"""
+Script para integrar o Email Validator completo no MyXAPP
+"""
+import os
+
+# Criar diretórios se não existirem
+os.makedirs('apps/email_validator', exist_ok=True)
+os.makedirs('templates/apps', exist_ok=True)
+os.makedirs('static/css', exist_ok=True)
+os.makedirs('static/js', exist_ok=True)
+
+print("🚀 Integrando Email Validator completo...")
+
+# 1. ROUTES.PY
+routes_content = '''# -*- coding: utf-8 -*-
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for, flash, send_file
 from models import db, User, Permission, App
 from functools import wraps
@@ -62,7 +77,7 @@ def validate_single_email(email):
     }
     
     # 1. Validação de formato básico
-    email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
     if not re.match(email_regex, email):
         result['details'].append('Formato inválido')
         return result
@@ -180,7 +195,7 @@ def upload():
         
         elif file_ext == 'txt':
             content = file.stream.read().decode('utf-8-sig')
-            emails = [line.strip() for line in content.split('\n') if line.strip()]
+            emails = [line.strip() for line in content.split('\\n') if line.strip()]
         
         elif file_ext in ['xlsx', 'xls']:
             workbook = openpyxl.load_workbook(file)
@@ -293,20 +308,20 @@ def export(format):
     
     elif format == 'txt':
         output = io.StringIO()
-        output.write(f'Email Validation Results - {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n')
-        output.write('=' * 80 + '\n\n')
+        output.write(f'Email Validation Results - {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\\n')
+        output.write('=' * 80 + '\\n\\n')
         
         for i, result in enumerate(results, 1):
-            output.write(f'{i}. {result["email"]}\n')
-            output.write(f'   Status: {"✓ VÁLIDO" if result["valid"] else "✗ INVÁLIDO"}\n')
-            output.write(f'   Score: {result.get("score", 0)}/100\n')
+            output.write(f'{i}. {result["email"]}\\n')
+            output.write(f'   Status: {"✓ VÁLIDO" if result["valid"] else "✗ INVÁLIDO"}\\n')
+            output.write(f'   Score: {result.get("score", 0)}/100\\n')
             
             if result.get('details'):
-                output.write(f'   Detalhes: {", ".join(result["details"])}\n')
+                output.write(f'   Detalhes: {", ".join(result["details"])}\\n')
             if result.get('warnings'):
-                output.write(f'   Avisos: {", ".join(result["warnings"])}\n')
+                output.write(f'   Avisos: {", ".join(result["warnings"])}\\n')
             
-            output.write('\n')
+            output.write('\\n')
         
         output.seek(0)
         return send_file(
@@ -318,3 +333,29 @@ def export(format):
     
     else:
         return jsonify({'error': 'Formato não suportado'}), 400
+'''
+
+with open('apps/email_validator/routes.py', 'w', encoding='utf-8') as f:
+    f.write(routes_content)
+
+print("✅ routes.py criado")
+
+# 2. ATUALIZAR REQUIREMENTS.TXT
+requirements_content = '''Flask==3.0.0
+Flask-SQLAlchemy==3.1.1
+Flask-Bcrypt==1.0.1
+python-dotenv==1.0.0
+dnspython==2.4.2
+openpyxl==3.1.2
+'''
+
+with open('requirements.txt', 'w', encoding='utf-8') as f:
+    f.write(requirements_content)
+
+print("✅ requirements.txt atualizado")
+
+print("\n🎉 Integração completa!")
+print("\n📋 Próximos passos:")
+print("1. pip install dnspython openpyxl --break-system-packages")
+print("2. Copia o HTML manualmente (é muito extenso)")
+print("3. python app.py")

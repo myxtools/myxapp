@@ -2,38 +2,293 @@
 
 {% block title %}Email Validator - MyXAPP{% endblock %}
 
+{% block extra_css %}
+<style>
+.validator-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.validator-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.validator-header h2 {
+    color: #2c3e50;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.validator-header p {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+}
+
+.email-input-section {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.email-input-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.email-input-group input {
+    flex: 1;
+    padding: 1rem;
+    font-size: 1.1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    transition: border-color 0.3s;
+}
+
+.email-input-group input:focus {
+    outline: none;
+    border-color: #0d6efd;
+}
+
+.validate-btn {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.validate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.validate-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.loading-spinner {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.result-section {
+    display: none;
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.result-section.show {
+    display: block;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.result-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.result-header h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.result-valid {
+    color: #27ae60;
+}
+
+.result-invalid {
+    color: #e74c3c;
+}
+
+.result-warning {
+    color: #f39c12;
+}
+
+.email-display {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    word-break: break-all;
+}
+
+.checks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.check-item {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #ccc;
+}
+
+.check-item.valid {
+    border-left-color: #27ae60;
+}
+
+.check-item.invalid {
+    border-left-color: #e74c3c;
+}
+
+.check-item h5 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    text-transform: uppercase;
+}
+
+.check-item p {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.details-list {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.details-list h4 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.details-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.details-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.details-list li:last-child {
+    border-bottom: none;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.btn-secondary-custom {
+    padding: 0.75rem 1.5rem;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-secondary-custom:hover {
+    background: #5a6268;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .email-input-group {
+        flex-direction: column;
+    }
+    
+    .checks-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <h2 class="mb-4">📧 Email Validator</h2>
-        
-        <div class="card shadow">
-            <div class="card-body p-4">
-                <p class="lead">Valide endereços de email rapidamente.</p>
-                
-                <div class="mb-3">
-                    <label for="emailInput" class="form-label">Endereço de Email</label>
-                    <input type="email" 
-                           class="form-control form-control-lg" 
-                           id="emailInput" 
-                           placeholder="exemplo@dominio.com">
-                </div>
-                
-                <button type="button" class="btn btn-primary btn-lg w-100" onclick="validateEmail()">
-                    Validar Email
-                </button>
-                
-                <div id="result" class="mt-4" style="display: none;">
-                    <div class="alert" role="alert" id="resultAlert">
-                        <h5 id="resultMessage"></h5>
-                        <p class="mb-0" id="resultDetail"></p>
-                    </div>
-                </div>
-            </div>
+<div class="validator-container">
+    <div class="validator-header">
+        <h2>📧 Email Validator Pro</h2>
+        <p>Validação avançada com verificação de DNS e domínio</p>
+    </div>
+
+    <div class="email-input-section">
+        <div class="email-input-group">
+            <input type="email" 
+                   id="emailInput" 
+                   class="form-control" 
+                   placeholder="Digite o email para validar..."
+                   autocomplete="off">
+            <button class="validate-btn" onclick="validateEmail()" id="validateBtn">
+                Validar Email
+            </button>
         </div>
-        
-        <div class="mt-4">
-            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Voltar ao Dashboard</a>
+        <div class="loading-spinner" id="loadingSpinner"></div>
+    </div>
+
+    <div class="result-section" id="resultSection">
+        <div class="result-header">
+            <h3 id="resultMessage"></h3>
+        </div>
+
+        <div class="email-display" id="emailDisplay"></div>
+
+        <div class="checks-grid" id="checksGrid"></div>
+
+        <div class="details-list" id="detailsList" style="display: none;">
+            <h4>Detalhes da Verificação:</h4>
+            <ul id="detailsContent"></ul>
+        </div>
+
+        <div class="action-buttons">
+            <button class="validate-btn" onclick="resetValidator()">
+                Validar Outro Email
+            </button>
+            <a href="{{ url_for('dashboard') }}" class="btn-secondary-custom">
+                Voltar ao Dashboard
+            </a>
         </div>
     </div>
 </div>
@@ -46,9 +301,19 @@ async function validateEmail() {
     const email = emailInput.value.trim();
     
     if (!email) {
-        showResult('Por favor, insira um email.', '', 'warning');
+        alert('Por favor, insira um email.');
         return;
     }
+    
+    const validateBtn = document.getElementById('validateBtn');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const resultSection = document.getElementById('resultSection');
+    
+    // Mostrar loading
+    validateBtn.disabled = true;
+    validateBtn.textContent = 'Validando...';
+    loadingSpinner.style.display = 'block';
+    resultSection.classList.remove('show');
     
     try {
         const response = await fetch('{{ url_for("email_validator.validate") }}', {
@@ -60,34 +325,84 @@ async function validateEmail() {
         });
         
         const data = await response.json();
+        displayResults(data);
         
-        if (data.valid) {
-            showResult('✅ Email Válido!', `O email "${data.email}" é válido.`, 'success');
-        } else {
-            showResult('❌ Email Inválido!', `O email "${data.email}" não é válido.`, 'danger');
-        }
     } catch (error) {
-        showResult('Erro', 'Ocorreu um erro ao validar o email.', 'danger');
+        console.error('Erro:', error);
+        alert('Ocorreu um erro ao validar o email.');
+    } finally {
+        validateBtn.disabled = false;
+        validateBtn.textContent = 'Validar Email';
+        loadingSpinner.style.display = 'none';
     }
 }
 
-function showResult(message, detail, type) {
-    const resultDiv = document.getElementById('result');
-    const resultAlert = document.getElementById('resultAlert');
+function displayResults(data) {
+    const resultSection = document.getElementById('resultSection');
     const resultMessage = document.getElementById('resultMessage');
-    const resultDetail = document.getElementById('resultDetail');
+    const emailDisplay = document.getElementById('emailDisplay');
+    const checksGrid = document.getElementById('checksGrid');
+    const detailsList = document.getElementById('detailsList');
+    const detailsContent = document.getElementById('detailsContent');
     
-    resultAlert.className = `alert alert-${type}`;
-    resultMessage.textContent = message;
-    resultDetail.textContent = detail;
-    resultDiv.style.display = 'block';
+    // Mensagem principal
+    resultMessage.textContent = data.message;
+    resultMessage.className = data.valid ? 'result-valid' : 'result-invalid';
+    
+    // Email
+    emailDisplay.textContent = data.email;
+    
+    // Checks
+    checksGrid.innerHTML = '';
+    const checks = data.checks || {};
+    
+    const checkLabels = {
+        'format': 'Formato',
+        'domain_extracted': 'Domínio',
+        'mx_records': 'Servidores Email',
+        'disposable': 'Email Real',
+        'syntax_advanced': 'Sintaxe Avançada'
+    };
+    
+    for (const [key, value] of Object.entries(checks)) {
+        const checkItem = document.createElement('div');
+        checkItem.className = `check-item ${value ? 'valid' : 'invalid'}`;
+        checkItem.innerHTML = `
+            <h5>${checkLabels[key] || key}</h5>
+            <p>${value ? '✅ Válido' : '❌ Inválido'}</p>
+        `;
+        checksGrid.appendChild(checkItem);
+    }
+    
+    // Detalhes
+    if (data.details && data.details.length > 0) {
+        detailsList.style.display = 'block';
+        detailsContent.innerHTML = '';
+        data.details.forEach(detail => {
+            const li = document.createElement('li');
+            li.textContent = detail;
+            detailsContent.appendChild(li);
+        });
+    }
+    
+    // Mostrar resultados
+    resultSection.classList.add('show');
 }
 
-// Permitir validar com Enter
+function resetValidator() {
+    document.getElementById('emailInput').value = '';
+    document.getElementById('resultSection').classList.remove('show');
+    document.getElementById('emailInput').focus();
+}
+
+// Permitir Enter para validar
 document.getElementById('emailInput').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
         validateEmail();
     }
 });
+
+// Focus no input ao carregar
+document.getElementById('emailInput').focus();
 </script>
 {% endblock %}
