@@ -1,90 +1,289 @@
 {% extends "base.html" %}
 
-{% block title %}Email Validator - MyXAPP{% endblock %}
+{% block title %}Email Validator PRO - MyXAPP{% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-.validator-container {
-    max-width: 800px;
+/* CSS EXATO DO ORIGINAL (static/css/style.css) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    min-height: 100vh;
+    color: #fff;
+}
+
+.container {
+    max-width: 1400px;
     margin: 0 auto;
-}
-
-.validator-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.validator-header h2 {
-    color: #2c3e50;
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-}
-
-.validator-header p {
-    color: #7f8c8d;
-    font-size: 1.1rem;
-}
-
-.email-input-section {
-    background: white;
-    border-radius: 10px;
     padding: 2rem;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin-bottom: 2rem;
 }
 
-.email-input-group {
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem 0;
+}
+
+.header h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.main-layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 2rem;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+    font-size: 1.5rem;
+    color: #1e3c72;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.tab {
+    padding: 1rem 2rem;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.tab.active {
+    color: #667eea;
+}
+
+.tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #667eea;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.input-group {
     display: flex;
     gap: 1rem;
     margin-bottom: 1rem;
 }
 
-.email-input-group input {
+.input-group input {
     flex: 1;
     padding: 1rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
     border: 2px solid #e0e0e0;
-    border-radius: 8px;
+    border-radius: 10px;
     transition: border-color 0.3s;
 }
 
-.email-input-group input:focus {
+.input-group input:focus {
     outline: none;
-    border-color: #0d6efd;
+    border-color: #667eea;
 }
 
-.validate-btn {
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.checkbox-label input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.upload-area {
+    border: 3px dashed #ccc;
+    border-radius: 15px;
+    padding: 3rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: #333;
+}
+
+.upload-area:hover,
+.upload-area.dragover {
+    border-color: #667eea;
+    background: #f0f4ff;
+}
+
+.upload-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    color: #667eea;
+}
+
+.btn {
     padding: 1rem 2rem;
-    font-size: 1.1rem;
-    font-weight: bold;
+    font-size: 1rem;
+    font-weight: 600;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-primary {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    width: 100%;
 }
 
-.validate-btn:hover {
+.btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
 }
 
-.validate-btn:disabled {
-    background: #ccc;
+.btn-primary:disabled {
+    opacity: 0.5;
     cursor: not-allowed;
-    transform: none;
 }
 
-.loading-spinner {
+.history-card {
+    max-height: 800px;
+    overflow-y: auto;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.history-item {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    color: #333;
+    transition: transform 0.2s;
+}
+
+.history-item:hover {
+    transform: translateX(5px);
+}
+
+.history-date {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.history-stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 1rem 0;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.stat-value.total { color: #667eea; }
+.stat-value.valid { color: #28a745; }
+.stat-value.invalid { color: #dc3545; }
+
+.stat-label {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.history-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-small {
+    flex: 1;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    border: 1px solid #ddd;
+    background: white;
+    color: #333;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-small:hover {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.loading {
     display: none;
-    width: 20px;
-    height: 20px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #667eea;
+    text-align: center;
+    padding: 2rem;
+    color: #333;
+}
+
+.loading.show {
+    display: block;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #667eea;
     border-radius: 50%;
+    width: 50px;
+    height: 50px;
     animation: spin 1s linear infinite;
-    margin: 0 auto;
+    margin: 0 auto 1rem;
 }
 
 @keyframes spin {
@@ -92,155 +291,42 @@
     100% { transform: rotate(360deg); }
 }
 
-.result-section {
-    display: none;
-    background: white;
+.result-message {
+    padding: 1rem;
     border-radius: 10px;
-    padding: 2rem;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin-bottom: 2rem;
-}
-
-.result-section.show {
-    display: block;
-    animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.result-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.result-header h3 {
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
 }
 
 .result-valid {
-    color: #27ae60;
+    background: #d4edda;
+    color: #155724;
 }
 
 .result-invalid {
-    color: #e74c3c;
+    background: #f8d7da;
+    color: #721c24;
 }
 
-.result-warning {
-    color: #f39c12;
-}
-
-.email-display {
-    background: #f8f9fa;
-    padding: 1rem;
-    border-radius: 8px;
-    font-family: monospace;
-    font-size: 1.1rem;
-    text-align: center;
-    margin-bottom: 2rem;
-    word-break: break-all;
-}
-
-.checks-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.check-item {
-    background: #f8f9fa;
-    padding: 1rem;
-    border-radius: 8px;
-    border-left: 4px solid #ccc;
-}
-
-.check-item.valid {
-    border-left-color: #27ae60;
-}
-
-.check-item.invalid {
-    border-left-color: #e74c3c;
-}
-
-.check-item h5 {
-    margin: 0 0 0.5rem 0;
-    font-size: 0.9rem;
-    color: #7f8c8d;
-    text-transform: uppercase;
-}
-
-.check-item p {
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: bold;
-}
-
-.details-list {
-    background: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 8px;
-}
-
-.details-list h4 {
-    margin-top: 0;
-    margin-bottom: 1rem;
-    color: #2c3e50;
-}
-
-.details-list ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.details-list li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.details-list li:last-child {
-    border-bottom: none;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 2rem;
-}
-
-.btn-secondary-custom {
-    padding: 0.75rem 1.5rem;
-    background: #6c757d;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    text-decoration: none;
+.back-link {
     display: inline-block;
+    margin-top: 2rem;
+    color: white;
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    transition: all 0.3s;
 }
 
-.btn-secondary-custom:hover {
-    background: #5a6268;
+.back-link:hover {
+    background: rgba(255, 255, 255, 0.3);
     color: white;
 }
 
-@media (max-width: 768px) {
-    .email-input-group {
-        flex-direction: column;
-    }
-    
-    .checks-grid {
+@media (max-width: 1200px) {
+    .main-layout {
         grid-template-columns: 1fr;
     }
 }
@@ -248,161 +334,267 @@
 {% endblock %}
 
 {% block content %}
-<div class="validator-container">
-    <div class="validator-header">
-        <h2>📧 Email Validator Pro</h2>
-        <p>Validação avançada com verificação de DNS e domínio</p>
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-envelope-circle-check"></i> Email Validator PRO</h1>
+        <p>Validação inteligente de emails em segundos</p>
     </div>
 
-    <div class="email-input-section">
-        <div class="email-input-group">
-            <input type="email" 
-                   id="emailInput" 
-                   class="form-control" 
-                   placeholder="Digite o email para validar..."
-                   autocomplete="off">
-            <button class="validate-btn" onclick="validateEmail()" id="validateBtn">
-                Validar Email
-            </button>
+    <div class="main-layout">
+        <!-- Card Principal -->
+        <div class="card">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('single')">Email Único</button>
+                <button class="tab" onclick="switchTab('upload')">Upload de Arquivo</button>
+            </div>
+
+            <!-- Tab Email Único -->
+            <div id="single-tab" class="tab-content active">
+                <div class="input-group">
+                    <input type="email" id="emailInput" placeholder="Digite o email para validar..." onkeypress="if(event.key==='Enter') validateEmail()">
+                </div>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="checkMXSingle" checked>
+                    <span>Verificar se domínio existe (mais lento, mais preciso)</span>
+                </label>
+                <button class="btn btn-primary" onclick="validateEmail()">
+                    <i class="fas fa-check"></i> Validar Email
+                </button>
+            </div>
+
+            <!-- Tab Upload -->
+            <div id="upload-tab" class="tab-content">
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                    <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                    <h3>Arraste ficheiro ou clique para selecionar</h3>
+                    <p>Suporta CSV, TXT, XLSX (máx. 1000 emails)</p>
+                    <input type="file" id="fileInput" accept=".csv,.txt,.xlsx,.xls" style="display: none;" onchange="handleFileUpload(event)">
+                </div>
+                <label class="checkbox-label" style="margin-top: 1rem;">
+                    <input type="checkbox" id="checkMXUpload" checked>
+                    <span>Verificar se domínio existe (mais lento, mais preciso)</span>
+                </label>
+            </div>
+
+            <!-- Loading -->
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>A processar...</p>
+            </div>
+
+            <!-- Resultado -->
+            <div id="result" style="display: none; margin-top: 1rem;"></div>
         </div>
-        <div class="loading-spinner" id="loadingSpinner"></div>
+
+        <!-- Card Histórico -->
+        <div class="card history-card">
+            <div class="history-header">
+                <h2 class="card-title">Histórico de Validações</h2>
+                <button class="btn-small" onclick="loadHistory()" title="Atualizar">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+            <div id="historyList"></div>
+        </div>
     </div>
 
-    <div class="result-section" id="resultSection">
-        <div class="result-header">
-            <h3 id="resultMessage"></h3>
-        </div>
-
-        <div class="email-display" id="emailDisplay"></div>
-
-        <div class="checks-grid" id="checksGrid"></div>
-
-        <div class="details-list" id="detailsList" style="display: none;">
-            <h4>Detalhes da Verificação:</h4>
-            <ul id="detailsContent"></ul>
-        </div>
-
-        <div class="action-buttons">
-            <button class="validate-btn" onclick="resetValidator()">
-                Validar Outro Email
-            </button>
-            <a href="{{ url_for('dashboard') }}" class="btn-secondary-custom">
-                Voltar ao Dashboard
-            </a>
-        </div>
-    </div>
+    <a href="{{ url_for('dashboard') }}" class="back-link">
+        <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
+    </a>
 </div>
-{% endblock %}
 
-{% block extra_js %}
 <script>
+// JavaScript EXATO DO ORIGINAL (static/js/script.js)
+
+function switchTab(tab) {
+    // Remover active de todos
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    
+    // Adicionar active ao selecionado
+    if (tab === 'single') {
+        document.querySelector('[onclick="switchTab(\'single\')"]').classList.add('active');
+        document.getElementById('single-tab').classList.add('active');
+    } else {
+        document.querySelector('[onclick="switchTab(\'upload\')"]').classList.add('active');
+        document.getElementById('upload-tab').classList.add('active');
+    }
+    
+    // Limpar resultado
+    document.getElementById('result').style.display = 'none';
+}
+
 async function validateEmail() {
-    const emailInput = document.getElementById('emailInput');
-    const email = emailInput.value.trim();
+    const email = document.getElementById('emailInput').value.trim();
+    const checkMX = document.getElementById('checkMXSingle').checked;
     
     if (!email) {
         alert('Por favor, insira um email.');
         return;
     }
     
-    const validateBtn = document.getElementById('validateBtn');
-    const loadingSpinner = document.getElementById('loadingSpinner');
-    const resultSection = document.getElementById('resultSection');
-    
-    // Mostrar loading
-    validateBtn.disabled = true;
-    validateBtn.textContent = 'Validando...';
-    loadingSpinner.style.display = 'block';
-    resultSection.classList.remove('show');
+    showLoading(true);
     
     try {
-        const response = await fetch('{{ url_for("email_validator.validate") }}', {
+        const response = await fetch('/apps/email-validator/api/validate', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email: email })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, checkMX })
         });
         
         const data = await response.json();
-        displayResults(data);
         
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+        
+        showResult(data.valid, data.reason, data.upload_id);
+        loadHistory();
     } catch (error) {
-        console.error('Erro:', error);
-        alert('Ocorreu um erro ao validar o email.');
+        alert('Erro ao validar email.');
     } finally {
-        validateBtn.disabled = false;
-        validateBtn.textContent = 'Validar Email';
-        loadingSpinner.style.display = 'none';
+        showLoading(false);
     }
 }
 
-function displayResults(data) {
-    const resultSection = document.getElementById('resultSection');
-    const resultMessage = document.getElementById('resultMessage');
-    const emailDisplay = document.getElementById('emailDisplay');
-    const checksGrid = document.getElementById('checksGrid');
-    const detailsList = document.getElementById('detailsList');
-    const detailsContent = document.getElementById('detailsContent');
+function showResult(valid, reason, uploadId) {
+    const resultDiv = document.getElementById('result');
+    const resultClass = valid ? 'result-valid' : 'result-invalid';
+    const resultIcon = valid ? 'fa-check-circle' : 'fa-times-circle';
     
-    // Mensagem principal
-    resultMessage.textContent = data.message;
-    resultMessage.className = data.valid ? 'result-valid' : 'result-invalid';
+    resultDiv.innerHTML = `
+        <div class="result-message ${resultClass}">
+            <i class="fas ${resultIcon}"></i>
+            ${valid ? 'Email válido!' : 'Email inválido: ' + reason}
+        </div>
+        ${uploadId ? `<a href="/apps/email-validator/details?id=${uploadId}" class="btn btn-primary" style="width: auto; display: inline-block; margin-top: 1rem;">
+            <i class="fas fa-eye"></i> Ver Detalhes
+        </a>` : ''}
+    `;
     
-    // Email
-    emailDisplay.textContent = data.email;
-    
-    // Checks
-    checksGrid.innerHTML = '';
-    const checks = data.checks || {};
-    
-    const checkLabels = {
-        'format': 'Formato',
-        'domain_extracted': 'Domínio',
-        'mx_records': 'Servidores Email',
-        'disposable': 'Email Real',
-        'syntax_advanced': 'Sintaxe Avançada'
-    };
-    
-    for (const [key, value] of Object.entries(checks)) {
-        const checkItem = document.createElement('div');
-        checkItem.className = `check-item ${value ? 'valid' : 'invalid'}`;
-        checkItem.innerHTML = `
-            <h5>${checkLabels[key] || key}</h5>
-            <p>${value ? '✅ Válido' : '❌ Inválido'}</p>
-        `;
-        checksGrid.appendChild(checkItem);
-    }
-    
-    // Detalhes
-    if (data.details && data.details.length > 0) {
-        detailsList.style.display = 'block';
-        detailsContent.innerHTML = '';
-        data.details.forEach(detail => {
-            const li = document.createElement('li');
-            li.textContent = detail;
-            detailsContent.appendChild(li);
-        });
-    }
-    
-    // Mostrar resultados
-    resultSection.classList.add('show');
+    resultDiv.style.display = 'block';
 }
 
-function resetValidator() {
-    document.getElementById('emailInput').value = '';
-    document.getElementById('resultSection').classList.remove('show');
-    document.getElementById('emailInput').focus();
-}
+// Upload de ficheiro
+const uploadArea = document.getElementById('uploadArea');
 
-// Permitir Enter para validar
-document.getElementById('emailInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        validateEmail();
-    }
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    uploadArea.addEventListener(eventName, e => e.preventDefault());
 });
 
-// Focus no input ao carregar
+['dragenter', 'dragover'].forEach(eventName => {
+    uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'));
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'));
+});
+
+uploadArea.addEventListener('drop', e => {
+    const files = e.dataTransfer.files;
+    if (files.length) processFile(files[0]);
+});
+
+function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (file) processFile(file);
+}
+
+async function processFile(file) {
+    const checkMX = document.getElementById('checkMXUpload').checked;
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('checkMX', checkMX);
+    
+    showLoading(true);
+    
+    try {
+        const response = await fetch('/apps/email-validator/api/upload', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+        
+        // Redirecionar para detalhes
+        window.location.href = `/apps/email-validator/details?id=${data.upload_id}`;
+    } catch (error) {
+        alert('Erro ao processar ficheiro.');
+    } finally {
+        showLoading(false);
+    }
+}
+
+async function loadHistory() {
+    try {
+        const response = await fetch('/apps/email-validator/api/history');
+        const history = await response.json();
+        
+        const historyList = document.getElementById('historyList');
+        
+        if (history.length === 0) {
+            historyList.innerHTML = '<p style="text-align: center; color: #666;">Nenhuma validação ainda</p>';
+            return;
+        }
+        
+        historyList.innerHTML = history.map(item => `
+            <div class="history-item">
+                <div class="history-date">${item.upload_date}</div>
+                <div class="history-stats">
+                    <div class="stat">
+                        <div class="stat-value total">${item.total}</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value valid">${item.valid}</div>
+                        <div class="stat-label">Válidos</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value invalid">${item.invalid}</div>
+                        <div class="stat-label">Inválidos</div>
+                    </div>
+                </div>
+                <div class="history-actions">
+                    <button class="btn-small" onclick="window.location.href='/apps/email-validator/details?id=${item.id}'">
+                        <i class="fas fa-eye"></i> Ver
+                    </button>
+                    <button class="btn-small" onclick="deleteUpload(${item.id})">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Erro ao carregar histórico:', error);
+    }
+}
+
+async function deleteUpload(uploadId) {
+    if (!confirm('Tem certeza que deseja eliminar esta validação?')) return;
+    
+    try {
+        await fetch(`/apps/email-validator/api/delete/${uploadId}`, { method: 'POST' });
+        loadHistory();
+    } catch (error) {
+        alert('Erro ao eliminar validação.');
+    }
+}
+
+function showLoading(show) {
+    document.getElementById('loading').classList.toggle('show', show);
+}
+
+// Carregar histórico ao iniciar
+loadHistory();
+
+// Auto-focus no input
 document.getElementById('emailInput').focus();
 </script>
 {% endblock %}

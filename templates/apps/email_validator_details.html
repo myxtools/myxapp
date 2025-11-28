@@ -1,0 +1,514 @@
+{% extends "base.html" %}
+
+{% block title %}Detalhes da Validação - MyXAPP{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* CSS EXATO DO ORIGINAL (static/css/details.css) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #141e30 0%, #243b55 100%);
+    min-height: 100vh;
+    color: #fff;
+}
+
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    font-size: 2rem;
+    color: #fff;
+}
+
+.header h1 span {
+    color: #f39c12;
+}
+
+.btn-back {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-back:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.stat-card h3 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card.total h3 { color: #3498db; }
+.stat-card.valid h3 { color: #2ecc71; }
+.stat-card.invalid h3 { color: #e74c3c; }
+
+.stat-card p {
+    color: #bbb;
+    font-size: 0.9rem;
+}
+
+.filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.filter-btn {
+    flex: 1;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.filter-btn.active {
+    background: #3498db;
+    border-color: #3498db;
+}
+
+.filter-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.controls-left {
+    color: #bbb;
+}
+
+.controls-right {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.per-page {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #bbb;
+}
+
+.per-page select {
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pagination {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.page-btn {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.page-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.page-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.table-container {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+tbody tr {
+    transition: background 0.2s;
+}
+
+tbody tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-valid {
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+    border: 1px solid #2ecc71;
+}
+
+.status-invalid {
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
+
+.export-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.export-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+.loading {
+    text-align: center;
+    padding: 3rem;
+    color: #bbb;
+}
+
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .controls {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>Detalhes da <span>Validação</span></h1>
+        <a href="/apps/email-validator/" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid" id="statsGrid">
+        <div class="stat-card total">
+            <h3 id="statTotal">0</h3>
+            <p>Total de Emails</p>
+        </div>
+        <div class="stat-card valid">
+            <h3 id="statValid">0</h3>
+            <p>Emails Válidos</p>
+        </div>
+        <div class="stat-card invalid">
+            <h3 id="statInvalid">0</h3>
+            <p>Emails Inválidos</p>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filters">
+        <button class="filter-btn active" data-filter="all" onclick="changeFilter('all')">
+            <i class="fas fa-list"></i> Todos (<span id="filterAllCount">0</span>)
+        </button>
+        <button class="filter-btn" data-filter="valid" onclick="changeFilter('valid')">
+            <i class="fas fa-check"></i> Válidos (<span id="filterValidCount">0</span>)
+        </button>
+        <button class="filter-btn" data-filter="invalid" onclick="changeFilter('invalid')">
+            <i class="fas fa-times"></i> Inválidos (<span id="filterInvalidCount">0</span>)
+        </button>
+    </div>
+
+    <!-- Controlos -->
+    <div class="controls">
+        <div class="controls-left">
+            <span id="controlsInfo">Mostrando 0-0 de 0</span>
+        </div>
+        <div class="controls-right">
+            <div class="per-page">
+                <label>Emails por página:</label>
+                <select id="perPageSelect" onchange="changePerPage()">
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+            <button class="export-btn" onclick="exportExcel()">
+                <i class="fas fa-download"></i> Exportar Excel
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="loading" class="loading" style="display: none;">
+        <div class="spinner"></div>
+        <p>A carregar dados...</p>
+    </div>
+
+    <!-- Tabela -->
+    <div class="table-container" id="tableContainer" style="display: none;">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>DATA DE UPLOAD</th>
+                    <th>EMAIL</th>
+                    <th>TIPO</th>
+                    <th>RAZÃO</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Paginação -->
+    <div class="controls" id="paginationControls" style="display: none; margin-top: 1.5rem;">
+        <div></div>
+        <div class="pagination">
+            <button class="page-btn" id="prevBtn" onclick="changePage(-1)">
+                <i class="fas fa-chevron-left"></i> Anterior
+            </button>
+            <span style="color: #bbb; padding: 0 1rem;" id="pageInfo">Página 1 de 1</span>
+            <button class="page-btn" id="nextBtn" onclick="changePage(1)">
+                Próxima <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+// JavaScript EXATO DO ORIGINAL (static/js/details.js)
+
+const uploadId = {{ upload_id }};
+let currentPage = 1;
+let perPage = 30;
+let currentFilter = 'all';
+let totalPages = 1;
+let uploadData = null;
+
+async function loadData() {
+    showLoading(true);
+    
+    try {
+        const response = await fetch(`/apps/email-validator/api/upload/${uploadId}?page=${currentPage}&per_page=${perPage}&filter=${currentFilter}`);
+        const data = await response.json();
+        
+        if (data.error) {
+            alert(data.error);
+            window.location.href = '/apps/email-validator/';
+            return;
+        }
+        
+        uploadData = data;
+        displayData(data);
+    } catch (error) {
+        alert('Erro ao carregar dados.');
+    } finally {
+        showLoading(false);
+    }
+}
+
+function displayData(data) {
+    // Stats
+    document.getElementById('statTotal').textContent = data.total;
+    document.getElementById('statValid').textContent = data.valid;
+    document.getElementById('statInvalid').textContent = data.invalid;
+    
+    // Filter counts
+    document.getElementById('filterAllCount').textContent = data.total;
+    document.getElementById('filterValidCount').textContent = data.valid;
+    document.getElementById('filterInvalidCount').textContent = data.invalid;
+    
+    // Tabela
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+    
+    data.emails.forEach((email, index) => {
+        const row = tbody.insertRow();
+        
+        const globalIndex = ((currentPage - 1) * perPage) + index + 1;
+        
+        let tipo, statusClass;
+        if (email.duplicate) {
+            tipo = 'DUPLICADO';
+            statusClass = 'status-invalid';
+        } else if (email.valid) {
+            tipo = 'VÁLIDO';
+            statusClass = 'status-valid';
+        } else {
+            tipo = 'INVÁLIDO';
+            statusClass = 'status-invalid';
+        }
+        
+        row.innerHTML = `
+            <td>${globalIndex}</td>
+            <td>${email.upload_date}</td>
+            <td style="font-family: monospace;">${email.email}</td>
+            <td><span class="status-badge ${statusClass}">${tipo}</span></td>
+            <td>${email.reason}</td>
+        `;
+    });
+    
+    // Paginação
+    totalPages = data.pagination.pages;
+    const start = ((currentPage - 1) * perPage) + 1;
+    const end = Math.min(start + data.emails.length - 1, data.pagination.total);
+    
+    document.getElementById('controlsInfo').textContent = `Mostrando ${start}-${end} de ${data.pagination.total}`;
+    document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${totalPages}`;
+    
+    document.getElementById('prevBtn').disabled = currentPage === 1;
+    document.getElementById('nextBtn').disabled = currentPage === totalPages;
+    
+    // Mostrar tabela
+    document.getElementById('tableContainer').style.display = 'block';
+    document.getElementById('paginationControls').style.display = 'flex';
+}
+
+function changeFilter(filter) {
+    currentFilter = filter;
+    currentPage = 1;
+    
+    // Atualizar botões
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+    
+    loadData();
+}
+
+function changePerPage() {
+    perPage = parseInt(document.getElementById('perPageSelect').value);
+    currentPage = 1;
+    loadData();
+}
+
+function changePage(direction) {
+    const newPage = currentPage + direction;
+    if (newPage >= 1 && newPage <= totalPages) {
+        currentPage = newPage;
+        loadData();
+    }
+}
+
+function exportExcel() {
+    window.location.href = `/apps/email-validator/export/${uploadId}`;
+}
+
+function showLoading(show) {
+    document.getElementById('loading').style.display = show ? 'block' : 'none';
+    document.getElementById('tableContainer').style.display = show ? 'none' : 'block';
+    document.getElementById('paginationControls').style.display = show ? 'none' : 'flex';
+}
+
+// Carregar dados ao iniciar
+loadData();
+</script>
+{% endblock %}
