@@ -28,11 +28,15 @@
                             <a class="nav-link" href="{{ url_for('admin.dashboard') }}">Admin</a>
                         </li>
                         {% endif %}
-                        <li class="nav-item">
-                            <span class="nav-link">{{ session.user_email }}</span>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ session.user_email }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{{ url_for('auth.change_password') }}">🔒 Alterar Password</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Sair</a></li>
+                            </ul>
                         </li>
                     {% else %}
                         <li class="nav-item">

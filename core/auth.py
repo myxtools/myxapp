@@ -81,3 +81,37 @@ def logout():
     session.clear()
     flash('Logout efetuado com sucesso.', 'success')
     return redirect(url_for('index'))
+
+@auth_bp.route('/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if request.method == 'POST':
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+        
+        user = User.query.get(session['user_id'])
+        
+        # Verificar password atual
+        if not user.check_password(current_password):
+            flash('Password atual incorreta.', 'danger')
+            return redirect(url_for('auth.change_password'))
+        
+        # Verificar se as novas passwords coincidem
+        if new_password != confirm_password:
+            flash('As novas passwords não coincidem.', 'danger')
+            return redirect(url_for('auth.change_password'))
+        
+        # Verificar comprimento mínimo
+        if len(new_password) < 6:
+            flash('A password deve ter pelo menos 6 caracteres.', 'danger')
+            return redirect(url_for('auth.change_password'))
+        
+        # Atualizar password
+        user.set_password(new_password)
+        db.session.commit()
+        
+        flash('Password alterada com sucesso!', 'success')
+        return redirect(url_for('dashboard'))
+    
+    return render_template('change_password.html')
