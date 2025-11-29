@@ -1,0 +1,119 @@
+═══════════════════════════════════════════════════════════════
+📋 TEXT TRANSFORMER v1.0 - CHECKLIST DE INSTALAÇÃO
+═══════════════════════════════════════════════════════════════
+
+✅ PASSO 1: FAZER BACKUP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Backup de models.py criado
+[ ] Backup de app.py criado
+
+✅ PASSO 2: COPIAR FICHEIROS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] apps/text_transformer/__init__.py copiado
+[ ] apps/text_transformer/routes.py copiado
+[ ] apps/text_transformer/transformer.py copiado
+[ ] templates/text_transformer_public.html copiado
+[ ] templates/apps/text_transformer.html copiado
+[ ] models.py substituído
+[ ] app.py substituído
+
+✅ PASSO 3: ATUALIZAR BASE DE DADOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Executado: python
+[ ] Executado: from app import app, db
+[ ] Executado: from models import TextTransformation
+[ ] Executado: with app.app_context(): db.create_all()
+[ ] Visto: "✅ Tabela criada!"
+
+✅ PASSO 4: INICIAR SERVIDOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Executado: python app.py
+[ ] Visto: "✅ Email Validator app registada!"
+[ ] Visto: "✅ Text Transformer app registada!"
+[ ] Visto: "✅ Admin criado: admin@myxapp.com / admin123"
+[ ] Visto: "🚀 MyXAPP a correr em http://localhost:5000"
+[ ] Sem erros no terminal
+
+✅ PASSO 5: TESTAR FRONTEND PÚBLICO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Acedido: http://localhost:5000/apps/text-transformer/public
+[ ] Página carrega sem erros
+[ ] Design aparece corretamente
+[ ] Contador de caracteres funciona
+[ ] Transformação "MAIÚSCULAS" funciona
+[ ] Watermark aparece no resultado
+[ ] Contador de transformações diminui
+[ ] Após 10 transformações, bloqueio funciona
+
+✅ PASSO 6: TESTAR ÁREA RESERVADA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Login feito: admin@myxapp.com / admin123
+[ ] Acedido: http://localhost:5000/apps/text-transformer
+[ ] Badge "PREMIUM" aparece
+[ ] Sidebar com histórico aparece
+[ ] Todas as 18 transformações disponíveis
+[ ] Estatísticas em tempo real funcionam
+
+✅ PASSO 7: TESTAR FUNCIONALIDADES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Testar pelo menos 5 transformações diferentes:
+
+[ ] MAIÚSCULAS
+[ ] minúsculas
+[ ] snake_case
+[ ] kebab-case
+[ ] Remover Acentos
+
+✅ PASSO 8: TESTAR HISTÓRICO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Fazer 3 transformações
+[ ] Histórico aparece na sidebar
+[ ] Detalhes corretos (tipo, data, preview)
+
+✅ PASSO 9: TESTAR EXPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Botão "Export TXT" funciona
+[ ] Ficheiro .txt baixa corretamente
+[ ] Botão "Export JSON" funciona
+[ ] Ficheiro .json baixa corretamente
+[ ] JSON tem estrutura correta
+
+✅ PASSO 10: TESTES FINAIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Botão "Copiar" funciona
+[ ] Botão "Limpar Tudo" funciona
+[ ] Responsividade mobile testada
+[ ] Sem erros no console do browser (F12)
+[ ] Sem erros no terminal do servidor
+
+═══════════════════════════════════════════════════════════════
+🎉 SE TODOS OS ITEMS ESTÃO ✓ - INSTALAÇÃO COMPLETA!
+═══════════════════════════════════════════════════════════════
+
+📝 NOTAS:
+- Guarda este checklist para referência futura
+- Se algum item falhar, consulta INSTALL_TEXT_TRANSFORMER.md
+- Para troubleshooting, verifica a secção "🐛 Troubleshooting"
+
+📞 PROBLEMAS COMUNS:
+
+1. Frontend não carrega
+   → Verifica se template está em templates/
+   → Ctrl+F5 para hard refresh
+
+2. Transformação não funciona
+   → Verifica logs no terminal
+   → Confirma que todos os ficheiros foram copiados
+
+3. Histórico não aparece
+   → Confirma que tabela foi criada (db.create_all())
+   → Faz logout e login novamente
+
+4. Export não funciona
+   → Verifica permissões da pasta
+   → Tenta browser diferente
+
+═══════════════════════════════════════════════════════════════
+Última atualização: 29 Novembro 2025
+Versão: Text Transformer v1.0
+═══════════════════════════════════════════════════════════════

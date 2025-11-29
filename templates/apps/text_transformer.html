@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Transformer - Área Reservada</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --success-color: #48bb78;
+            --warning-color: #f6ad55;
+            --danger-color: #f56565;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            padding: 2rem 0;
+        }
+        
+        .header-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header-section h1 {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .premium-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #333;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .user-info {
+            background: #f7fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        
+        .features-box {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        
+        .features-box ul {
+            margin: 0.5rem 0 0 0;
+            padding-left: 1.5rem;
+            list-style: none;
+        }
+        
+        .features-box ul li {
+            margin: 0.5rem 0;
+        }
+        
+        .features-box ul li::before {
+            content: "✅ ";
+            margin-right: 0.5rem;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .toolbar {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .transformation-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .transform-btn {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+        
+        .transform-btn:hover {
+            border-color: var(--primary-color);
+            background: #f7fafc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .transform-btn.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-color: transparent;
+        }
+        
+        .transform-btn .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .transform-btn .name {
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+        
+        .transform-btn .description {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            margin-top: 0.25rem;
+        }
+        
+        .transform-btn .example {
+            font-size: 0.7rem;
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(0,0,0,0.05);
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .transform-btn.active .example {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .text-areas {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .text-areas {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .text-box {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .text-box label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+        }
+        
+        .text-box textarea {
+            flex: 1;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 400px;
+        }
+        
+        .text-box textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .char-counter {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-top: 0.5rem;
+        }
+        
+        .char-counter.warning {
+            color: var(--warning-color);
+            font-weight: bold;
+        }
+        
+        .char-counter.danger {
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+        
+        .stats-box {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 6px;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-top: 0.25rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-transform {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-transform:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-transform:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #2d3748;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+        
+        .category-section {
+            margin-bottom: 2rem;
+        }
+        
+        .category-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .extra-options {
+            background: #f7fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .extra-options.show {
+            display: block;
+        }
+        
+        .extra-options input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .extra-options label {
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .history-sidebar {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .history-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid var(--primary-color);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .history-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .history-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .history-item-type {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+        }
+        
+        .history-item-date {
+            font-size: 0.75rem;
+            color: #718096;
+        }
+        
+        .history-item-preview {
+            font-size: 0.8rem;
+            color: #4a5568;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .alert {
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .spinner-border {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-width: 0.2rem;
+        }
+        
+        .modal-content {
+            border-radius: 15px;
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+
+</style>
+</head>
+<body>
+    <div class="container main-container">
+        <!-- Header -->
+        <div class="header-section">
+            <div class="text-center">
+                <span class="premium-badge">
+                    <i class="fas fa-crown"></i> VERSÃO PREMIUM
+                </span>
+                <h1><i class="fas fa-magic"></i> Text Transformer</h1>
+                <p class="lead mb-0">18 ferramentas profissionais | Transformações ilimitadas</p>
+            </div>
+            
+            <!-- User Info -->
+            <div class="user-info">
+                <strong><i class="fas fa-user"></i> Utilizador:</strong> {{ user.email }}
+                <a href="/dashboard" class="btn btn-sm btn-outline-primary float-end">
+                    <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
+                </a>
+            </div>
+            
+            <!-- Features -->
+            <div class="features-box">
+                <strong><i class="fas fa-star"></i> Vantagens da Versão Premium:</strong>
+                <ul>
+                    <li><strong>50.000 caracteres</strong> por transformação</li>
+                    <li><strong>18 ferramentas profissionais</strong></li>
+                    <li><strong>Transformações ilimitadas</strong></li>
+                    <li><strong>Sem watermark</strong></li>
+                    <li><strong>Histórico completo</strong></li>
+                    <li><strong>Exportação TXT/JSON</strong></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Conteúdo Principal -->
+        <div class="content-section">
+            <!-- Alerts -->
+            <div id="alertContainer"></div>
+            
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <h5><i class="fas fa-tools"></i> Escolher Transformação</h5>
+                <p class="text-muted mb-0">Selecione uma das 18 ferramentas disponíveis:</p>
+                
+                {% for category, transformations in categories.items() %}
+                <div class="category-section">
+                    <div class="category-title">
+                        {% if category == 'Básico' %}<i class="fas fa-font"></i>
+                        {% elif category == 'Avançado' %}<i class="fas fa-fire"></i>
+                        {% elif category == 'Programação' %}<i class="fas fa-code"></i>
+                        {% elif category == 'Utilidades' %}<i class="fas fa-wrench"></i>
+                        {% elif category == 'Extração' %}<i class="fas fa-filter"></i>
+                        {% endif %}
+                        {{ category }}
+                    </div>
+                    <div class="transformation-buttons">
+                        {% for trans in transformations %}
+                        <div class="transform-btn" 
+                             data-transform="{{ trans.key }}"
+                             onclick="selectTransformation('{{ trans.key }}')">
+                            <div class="icon">
+                                {% if trans.key == 'uppercase' %}<i class="fas fa-font"></i>
+                                {% elif trans.key == 'lowercase' %}<i class="fas fa-text-height"></i>
+                                {% elif trans.key == 'capitalize' %}<i class="fas fa-heading"></i>
+                                {% elif trans.key == 'title_case' %}<i class="fas fa-text-width"></i>
+                                {% elif trans.key == 'alternating_case' %}<i class="fas fa-wave-square"></i>
+                                {% elif trans.key == 'reverse' %}<i class="fas fa-exchange-alt"></i>
+                                {% elif trans.key == 'snake_case' %}<i class="fab fa-python"></i>
+                                {% elif trans.key == 'kebab_case' %}<i class="fas fa-minus"></i>
+                                {% elif trans.key == 'camel_case' %}<i class="fab fa-js"></i>
+                                {% elif trans.key == 'pascal_case' %}<i class="fas fa-code"></i>
+                                {% elif trans.key == 'remove_accents' %}<i class="fas fa-eraser"></i>
+                                {% elif trans.key == 'remove_extra_spaces' %}<i class="fas fa-compress"></i>
+                                {% elif trans.key == 'remove_duplicate_lines' %}<i class="fas fa-copy"></i>
+                                {% elif trans.key == 'sort_lines_asc' %}<i class="fas fa-sort-alpha-down"></i>
+                                {% elif trans.key == 'sort_lines_desc' %}<i class="fas fa-sort-alpha-up"></i>
+                                {% elif trans.key == 'add_line_numbers' %}<i class="fas fa-list-ol"></i>
+                                {% elif trans.key == 'extract_emails' %}<i class="fas fa-at"></i>
+                                {% elif trans.key == 'extract_urls' %}<i class="fas fa-link"></i>
+                                {% endif %}
+                            </div>
+                            <div class="name">{{ trans.name }}</div>
+                            <div class="description">{{ trans.description }}</div>
+                            <div class="example">{{ trans.example }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Extra Options (para prefix/suffix) -->
+            <div class="extra-options" id="extraOptions">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="prefixInput">
+                            <i class="fas fa-arrow-right"></i> Prefixo (adicionar no início de cada linha):
+                        </label>
+                        <input type="text" id="prefixInput" placeholder="Ex: > " />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="suffixInput">
+                            <i class="fas fa-arrow-left"></i> Sufixo (adicionar no fim de cada linha):
+                        </label>
+                        <input type="text" id="suffixInput" placeholder="Ex: ;" />
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Text Areas -->
+            <div class="text-areas">
+                <!-- Input -->
+                <div class="text-box">
+                    <label for="inputText">
+                        <i class="fas fa-edit"></i> Texto Original
+                    </label>
+                    <textarea id="inputText" placeholder="Cole ou escreva o seu texto aqui..." oninput="updateCharCounter()"></textarea>
+                    <div class="char-counter" id="charCounter">0 / {{ char_limit }} caracteres</div>
+                </div>
+                
+                <!-- Output -->
+                <div class="text-box">
+                    <label for="outputText">
+                        <i class="fas fa-check-circle"></i> Texto Transformado
+                    </label>
+                    <textarea id="outputText" placeholder="O resultado aparecerá aqui..." readonly></textarea>
+                    <div class="char-counter" id="outputCharCounter">0 caracteres</div>
+                    
+                    <!-- Stats -->
+                    <div class="stats-box" id="statsBox" style="display: none;">
+                        <strong><i class="fas fa-chart-bar"></i> Estatísticas:</strong>
+                        <div class="stats-grid" id="statsGrid"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn-transform" onclick="transformText()" id="transformBtn" disabled>
+                    <i class="fas fa-magic"></i> Transformar Texto
+                </button>
+                <button class="btn-secondary" onclick="clearAll()">
+                    <i class="fas fa-eraser"></i> Limpar Tudo
+                </button>
+                <button class="btn-secondary" onclick="copyToClipboard()" id="copyBtn" disabled>
+                    <i class="fas fa-copy"></i> Copiar Resultado
+                </button>
+                <button class="btn-secondary" onclick="showExportModal()" id="exportBtn" disabled>
+                    <i class="fas fa-download"></i> Exportar
+                </button>
+            </div>
+            
+            <!-- Histórico -->
+            {% if history %}
+            <div class="history-sidebar">
+                <h5><i class="fas fa-history"></i> Histórico Recente (últimas 10)</h5>
+                <p class="text-muted small">Clique para carregar novamente</p>
+                
+                {% for item in history[:10] %}
+                <div class="history-item" onclick="loadFromHistory('{{ item.original_text|replace("'", "\\'") }}', '{{ item.transformation_type }}')">
+                    <div class="history-item-header">
+                        <span class="history-item-type">
+                            <i class="fas fa-bolt"></i> {{ item.transformation_type|replace('_', ' ')|title }}
+                        </span>
+                        <span class="history-item-date">
+                            {{ item.created_at.strftime('%d/%m/%Y %H:%M') }}
+                        </span>
+                    </div>
+                    <div class="history-item-preview">
+                        {{ item.original_text[:80] }}{% if item.original_text|length > 80 %}...{% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                
+                {% if history|length > 10 %}
+                <div class="text-center mt-3">
+                    <a href="/apps/text-transformer/history" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-list"></i> Ver Histórico Completo ({{ history|length }})
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Export Modal -->
+    <div class="modal fade" id="exportModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-download"></i> Exportar Resultado
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Escolha o formato de exportação:</p>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary" onclick="exportFile('txt')">
+                            <i class="fas fa-file-alt"></i> Exportar como TXT
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="exportFile('json')">
+                            <i class="fas fa-file-code"></i> Exportar como JSON (com estatísticas)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedTransformation = null;
+        const charLimit = {{ char_limit }};
+        let exportModalInstance = null;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            exportModalInstance = new bootstrap.Modal(document.getElementById('exportModal'));
+        });
+        
+        function selectTransformation(type) {
+            // Remover seleção anterior
+            document.querySelectorAll('.transform-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Adicionar seleção nova
+            const btn = document.querySelector(`[data-transform="${type}"]`);
+            if (btn) {
+                btn.classList.add('active');
+                selectedTransformation = type;
+                updateTransformButton();
+                
+                // Mostrar/esconder opções extras
+                const extraOptions = document.getElementById('extraOptions');
+                if (type === 'add_prefix' || type === 'add_suffix') {
+                    extraOptions.classList.add('show');
+                } else {
+                    extraOptions.classList.remove('show');
+                }
+            }
+        }
+        
+        function updateCharCounter() {
+            const input = document.getElementById('inputText');
+            const counter = document.getElementById('charCounter');
+            const length = input.value.length;
+            
+            counter.textContent = `${length.toLocaleString()} / ${charLimit.toLocaleString()} caracteres`;
+            
+            if (length > charLimit) {
+                counter.classList.add('danger');
+                counter.classList.remove('warning');
+            } else if (length > charLimit * 0.9) {
+                counter.classList.add('warning');
+                counter.classList.remove('danger');
+            } else {
+                counter.classList.remove('warning', 'danger');
+            }
+            
+            updateTransformButton();
+        }
+        
+        function updateTransformButton() {
+            const btn = document.getElementById('transformBtn');
+            const input = document.getElementById('inputText');
+            
+            if (selectedTransformation && input.value.trim() && input.value.length <= charLimit) {
+                btn.disabled = false;
+            } else {
+                btn.disabled = true;
+            }
+        }
+
+function showAlert(message, type = 'info') {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show`;
+            alert.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            container.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+        
+        async function transformText() {
+            const input = document.getElementById('inputText').value;
+            const output = document.getElementById('outputText');
+            const btn = document.getElementById('transformBtn');
+            
+            if (!selectedTransformation) {
+                showAlert('Por favor, selecione uma transformação primeiro.', 'warning');
+                return;
+            }
+            
+            if (!input.trim()) {
+                showAlert('Por favor, insira algum texto para transformar.', 'warning');
+                return;
+            }
+            
+            if (input.length > charLimit) {
+                showAlert(`O texto excede o limite de ${charLimit.toLocaleString()} caracteres.`, 'danger');
+                return;
+            }
+            
+            // Loading state
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Transformando...';
+            output.value = '';
+            
+            try {
+                const requestData = {
+                    text: input,
+                    transformation: selectedTransformation
+                };
+                
+                // Adicionar prefix/suffix se necessário
+                if (selectedTransformation === 'add_prefix') {
+                    requestData.prefix = document.getElementById('prefixInput').value || '';
+                }
+                if (selectedTransformation === 'add_suffix') {
+                    requestData.suffix = document.getElementById('suffixInput').value || '';
+                }
+                
+                const response = await fetch('/apps/text-transformer/api/transform', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    output.value = data.result;
+                    document.getElementById('outputCharCounter').textContent = `${data.result.length.toLocaleString()} caracteres`;
+                    
+                    // Update stats
+                    displayStats(data.stats);
+                    
+                    // Enable copy and export buttons
+                    document.getElementById('copyBtn').disabled = false;
+                    document.getElementById('exportBtn').disabled = false;
+                    
+                    showAlert('✅ Texto transformado com sucesso!', 'success');
+                } else {
+                    showAlert(data.error || 'Erro ao transformar texto.', 'danger');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Erro ao comunicar com o servidor.', 'danger');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-magic"></i> Transformar Texto';
+                updateTransformButton();
+            }
+        }
+        
+        function displayStats(stats) {
+            const statsBox = document.getElementById('statsBox');
+            const statsGrid = document.getElementById('statsGrid');
+            
+            statsGrid.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-value">${stats.characters.toLocaleString()}</div>
+                    <div class="stat-label">Caracteres</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.characters_no_spaces.toLocaleString()}</div>
+                    <div class="stat-label">Sem Espaços</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.words.toLocaleString()}</div>
+                    <div class="stat-label">Palavras</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.lines.toLocaleString()}</div>
+                    <div class="stat-label">Linhas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.sentences.toLocaleString()}</div>
+                    <div class="stat-label">Frases</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.reading_time} min</div>
+                    <div class="stat-label">Tempo Leitura</div>
+                </div>
+            `;
+            
+            statsBox.style.display = 'block';
+        }
+        
+        function clearAll() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('outputText').value = '';
+            document.getElementById('charCounter').textContent = `0 / ${charLimit.toLocaleString()} caracteres`;
+            document.getElementById('outputCharCounter').textContent = '0 caracteres';
+            document.getElementById('statsBox').style.display = 'none';
+            document.getElementById('copyBtn').disabled = true;
+            document.getElementById('exportBtn').disabled = true;
+            
+            // Limpar campos extras
+            document.getElementById('prefixInput').value = '';
+            document.getElementById('suffixInput').value = '';
+            
+            // Remover seleção
+            document.querySelectorAll('.transform-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            selectedTransformation = null;
+            
+            // Esconder opções extras
+            document.getElementById('extraOptions').classList.remove('show');
+            
+            updateTransformButton();
+        }
+        
+        function copyToClipboard() {
+            const output = document.getElementById('outputText');
+            output.select();
+            document.execCommand('copy');
+            
+            const btn = document.getElementById('copyBtn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+            }, 2000);
+            
+            showAlert('Texto copiado para a área de transferência!', 'success');
+        }
+        
+        function showExportModal() {
+            exportModalInstance.show();
+        }
+        
+        async function exportFile(format) {
+            const output = document.getElementById('outputText').value;
+            
+            if (!output) {
+                showAlert('Não há texto para exportar.', 'warning');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/apps/text-transformer/api/export', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: output,
+                        format: format
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Create download
+                    const blob = new Blob([data.content], { type: data.mime_type });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = data.filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    exportModalInstance.hide();
+                    showAlert(`Ficheiro ${format.toUpperCase()} exportado com sucesso!`, 'success');
+                } else {
+                    showAlert(data.error || 'Erro ao exportar.', 'danger');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Erro ao exportar ficheiro.', 'danger');
+            }
+        }
+        
+        function loadFromHistory(text, type) {
+            document.getElementById('inputText').value = text;
+            updateCharCounter();
+            selectTransformation(type);
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            showAlert('Texto carregado do histórico!', 'info');
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + Enter para transformar
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                if (!document.getElementById('transformBtn').disabled) {
+                    transformText();
+                }
+            }
+            
+            // Ctrl/Cmd + K para limpar
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                clearAll();
+            }
+            
+            // Ctrl/Cmd + C para copiar (quando foco no output)
+            if ((e.ctrlKey || e.metaKey) && e.key === 'c' && document.activeElement.id === 'outputText') {
+                copyToClipboard();
+            }
+        });
+        
+        // Initialize
+        updateCharCounter();
+        updateTransformButton();
+    </script>
+</body>
+</html>

@@ -46,3 +46,13 @@ Thumbs.db
 # Environment
 .env
 .env.local
+
+# Render
+.render-buildpacks.json
+
+# Logs
+*.log
+
+# Backups
+backups/
+backup_*/

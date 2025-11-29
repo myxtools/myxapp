@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Transformer - Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem 0;
+        }
+        
+        .header-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header-section h1 {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+        
+        .premium-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #333;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .user-info {
+            background: #f7fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .features-box {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        
+        .features-box ul {
+            margin: 0.5rem 0 0 0;
+            padding-left: 1.5rem;
+            list-style: none;
+        }
+        
+        .features-box ul li::before {
+            content: "✅ ";
+            margin-right: 0.5rem;
+        }
+        
+        .tools-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .category-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .category-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .tool-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            border-color: var(--primary-color);
+        }
+        
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tool-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tool-description {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-bottom: 0.75rem;
+        }
+        
+        .tool-example {
+            font-size: 0.8rem;
+            color: #4a5568;
+            background: #f7fafc;
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .quick-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .quick-link-btn {
+            background: white;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .quick-link-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header-section">
+            <div class="text-center">
+                <span class="premium-badge">
+                    <i class="fas fa-crown"></i> VERSÃO PREMIUM
+                </span>
+                <h1><i class="fas fa-magic"></i> Text Transformer</h1>
+                <p class="lead mb-0">18 Ferramentas Profissionais de Transformação de Texto</p>
+            </div>
+            
+            <!-- User Info -->
+            <div class="user-info">
+                <div>
+                    <strong><i class="fas fa-user"></i> Utilizador:</strong> {{ user.email }}
+                </div>
+                <div class="quick-links">
+                    <a href="{{ url_for('text_transformer.history') }}" class="quick-link-btn">
+                        <i class="fas fa-history"></i> Histórico
+                    </a>
+                    <a href="/dashboard" class="quick-link-btn">
+                        <i class="fas fa-th-large"></i> Dashboard
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Features -->
+            <div class="features-box">
+                <strong><i class="fas fa-star"></i> Vantagens Premium:</strong>
+                <ul>
+                    <li><strong>18 ferramentas profissionais</strong></li>
+                    <li><strong>50.000 caracteres</strong> por transformação</li>
+                    <li><strong>Transformações ilimitadas</strong></li>
+                    <li><strong>Histórico automático</strong></li>
+                    <li><strong>Exportação TXT/JSON</strong></li>
+                    <li><strong>Sem watermark</strong></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Tools Grid -->
+        <div class="tools-section">
+            <h2 class="section-title">
+                <i class="fas fa-tools"></i> Escolha uma Ferramenta
+            </h2>
+            
+            {% for category, tools in categories.items() %}
+            <div class="category-section">
+                <h3 class="category-title">
+                    {% if category == 'Básico' %}<i class="fas fa-font"></i>
+                    {% elif category == 'Avançado' %}<i class="fas fa-fire"></i>
+                    {% elif category == 'Programação' %}<i class="fas fa-code"></i>
+                    {% elif category == 'Utilidades' %}<i class="fas fa-wrench"></i>
+                    {% elif category == 'Extração' %}<i class="fas fa-filter"></i>
+                    {% endif %}
+                    {{ category }}
+                </h3>
+                <div class="tools-grid">
+                    {% for tool in tools %}
+                    <a href="{{ url_for('text_transformer.transformation', transformation_type=tool.key) }}" class="tool-card">
+                        <div class="tool-icon">
+                            <i class="{{ tool.icon }}"></i>
+                        </div>
+                        <div class="tool-name">{{ tool.name }}</div>
+                        <div class="tool-description">{{ tool.description }}</div>
+                        <div class="tool-example">{{ tool.example }}</div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

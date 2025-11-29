@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Transformer - MyXAPP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --success-color: #48bb78;
+            --warning-color: #f6ad55;
+            --danger-color: #f56565;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            padding: 2rem 0;
+        }
+        
+        .header-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header-section h1 {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .public-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #333;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .limitations-box {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning-color);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        
+        .limitations-box ul {
+            margin: 0.5rem 0 0 0;
+            padding-left: 1.5rem;
+        }
+        
+        .upgrade-box {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .upgrade-box .btn {
+            background: white;
+            color: var(--primary-color);
+            font-weight: bold;
+            border: none;
+            padding: 0.75rem 2rem;
+            margin-top: 1rem;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .toolbar {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .transformation-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .transform-btn {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+        
+        .transform-btn:hover {
+            border-color: var(--primary-color);
+            background: #f7fafc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .transform-btn.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-color: transparent;
+        }
+        
+        .transform-btn .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .transform-btn .name {
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+        
+        .transform-btn .description {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            margin-top: 0.25rem;
+        }
+        
+        .transform-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            position: relative;
+        }
+        
+        .transform-btn.disabled::after {
+            content: '🔒 Premium';
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--warning-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        .text-areas {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .text-areas {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .text-box {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .text-box label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+        }
+        
+        .text-box textarea {
+            flex: 1;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 300px;
+        }
+        
+        .text-box textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .char-counter {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-top: 0.5rem;
+        }
+        
+        .char-counter.warning {
+            color: var(--warning-color);
+            font-weight: bold;
+        }
+        
+        .char-counter.danger {
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+        
+        .stats-box {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 6px;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-top: 0.25rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-transform {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-transform:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-transform:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+.btn-secondary {
+            background: #e2e8f0;
+            color: #2d3748;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+        
+        .watermark-notice {
+            background: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .rate-limit-box {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .rate-limit-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .rate-limit-counter {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .category-section {
+            margin-bottom: 2rem;
+        }
+        
+        .category-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .alert {
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .spinner-border {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-width: 0.2rem;
+        }
+        
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container main-container">
+        <!-- Header -->
+        <div class="header-section">
+            <div class="text-center">
+                <span class="public-badge">
+                    <i class="fas fa-globe"></i> VERSÃO PÚBLICA
+                </span>
+                <h1><i class="fas fa-magic"></i> Text Transformer</h1>
+                <p class="lead mb-0">Transforme textos instantaneamente com 4 ferramentas básicas</p>
+            </div>
+            
+            <!-- Limitações -->
+            <div class="limitations-box">
+                <strong><i class="fas fa-info-circle"></i> Limitações da Versão Pública:</strong>
+                <ul>
+                    <li><strong>Máximo {{ char_limit }} caracteres</strong> por transformação</li>
+                    <li><strong>{{ total_transformations }} transformações por hora</strong> (resetam automaticamente)</li>
+                    <li><strong>4 ferramentas básicas</strong> disponíveis</li>
+                    <li><strong>Watermark</strong> adicionado aos resultados</li>
+                    <li><strong>Sem histórico</strong> ou exportação</li>
+                </ul>
+            </div>
+            
+            <!-- Upgrade Box -->
+            <div class="upgrade-box">
+                <h4><i class="fas fa-crown"></i> Desbloquear Versão Completa</h4>
+                <p class="mb-0">✅ 50.000 caracteres | ✅ 18 ferramentas | ✅ Transformações ilimitadas | ✅ Sem watermark | ✅ Histórico e exportação</p>
+                <a href="/login" class="btn btn-lg">
+                    <i class="fas fa-unlock"></i> Fazer Login ou Registar
+                </a>
+            </div>
+        </div>
+        
+        <!-- Conteúdo Principal -->
+        <div class="content-section">
+            <!-- Rate Limit Counter -->
+            <div class="rate-limit-box" id="rateLimitBox">
+                <div class="rate-limit-info">
+                    <i class="fas fa-clock fa-2x"></i>
+                    <div>
+                        <div style="font-size: 0.9rem;">Transformações Restantes:</div>
+                        <div class="rate-limit-counter" id="rateLimitCounter">
+                            {{ transformations_remaining }} / {{ total_transformations }}
+                        </div>
+                    </div>
+                </div>
+                <div style="font-size: 0.85rem;">
+                    <i class="fas fa-sync-alt"></i> Resetam a cada hora
+                </div>
+            </div>
+            
+            <!-- Alerts -->
+            <div id="alertContainer"></div>
+            
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <h5><i class="fas fa-tools"></i> Escolher Transformação</h5>
+                
+                {% for category, transformations in categories.items() %}
+                <div class="category-section">
+                    <div class="category-title">
+                        <i class="fas fa-folder"></i> {{ category }}
+                    </div>
+                    <div class="transformation-buttons">
+                        {% for trans in transformations %}
+                        <div class="transform-btn {% if trans.key not in ['uppercase', 'lowercase', 'capitalize', 'title_case'] %}disabled{% endif %}" 
+                             data-transform="{{ trans.key }}"
+                             {% if trans.key in ['uppercase', 'lowercase', 'capitalize', 'title_case'] %}onclick="selectTransformation('{{ trans.key }}')"{% endif %}>
+                            <div class="icon">
+                                {% if trans.key == 'uppercase' %}<i class="fas fa-font"></i>
+                                {% elif trans.key == 'lowercase' %}<i class="fas fa-text-height"></i>
+                                {% elif trans.key == 'capitalize' %}<i class="fas fa-heading"></i>
+                                {% elif trans.key == 'title_case' %}<i class="fas fa-text-width"></i>
+                                {% else %}<i class="fas fa-lock"></i>
+                                {% endif %}
+                            </div>
+                            <div class="name">{{ trans.name }}</div>
+                            <div class="description">{{ trans.description }}</div>
+                            {% if trans.key in ['uppercase', 'lowercase', 'capitalize', 'title_case'] %}
+                            <div style="font-size: 0.7rem; color: #38a169; margin-top: 0.5rem;">
+                                <i class="fas fa-check-circle"></i> Disponível
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Text Areas -->
+            <div class="text-areas">
+                <!-- Input -->
+                <div class="text-box">
+                    <label for="inputText">
+                        <i class="fas fa-edit"></i> Texto Original
+                    </label>
+                    <textarea id="inputText" placeholder="Cole ou escreva o seu texto aqui..." oninput="updateCharCounter()"></textarea>
+                    <div class="char-counter" id="charCounter">0 / {{ char_limit }} caracteres</div>
+                    <div class="watermark-notice">
+                        <i class="fas fa-info-circle"></i> <strong>Nota:</strong> O texto transformado incluirá a assinatura "✨ Processado com MyXAPP Text Transformer"
+                    </div>
+                </div>
+                
+                <!-- Output -->
+                <div class="text-box">
+                    <label for="outputText">
+                        <i class="fas fa-check-circle"></i> Texto Transformado
+                    </label>
+                    <textarea id="outputText" placeholder="O resultado aparecerá aqui..." readonly></textarea>
+                    <div class="char-counter" id="outputCharCounter">0 caracteres</div>
+                    
+                    <!-- Stats -->
+                    <div class="stats-box" id="statsBox" style="display: none;">
+                        <strong><i class="fas fa-chart-bar"></i> Estatísticas:</strong>
+                        <div class="stats-grid" id="statsGrid"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn-transform" onclick="transformText()" id="transformBtn" disabled>
+                    <i class="fas fa-magic"></i> Transformar Texto
+                </button>
+                <button class="btn-secondary" onclick="clearAll()">
+                    <i class="fas fa-eraser"></i> Limpar Tudo
+                </button>
+                <button class="btn-secondary" onclick="copyToClipboard()" id="copyBtn" disabled>
+                    <i class="fas fa-copy"></i> Copiar Resultado
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedTransformation = null;
+        const charLimit = {{ char_limit }};
+        let transformationsRemaining = {{ transformations_remaining }};
+        const totalTransformations = {{ total_transformations }};
+        
+        function selectTransformation(type) {
+            // Remover seleção anterior
+            document.querySelectorAll('.transform-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Adicionar seleção nova
+            const btn = document.querySelector(`[data-transform="${type}"]`);
+            if (btn && !btn.classList.contains('disabled')) {
+                btn.classList.add('active');
+                selectedTransformation = type;
+                updateTransformButton();
+            }
+        }
+        
+        function updateCharCounter() {
+            const input = document.getElementById('inputText');
+            const counter = document.getElementById('charCounter');
+            const length = input.value.length;
+            
+            counter.textContent = `${length} / ${charLimit} caracteres`;
+            
+            if (length > charLimit) {
+                counter.classList.add('danger');
+                counter.classList.remove('warning');
+            } else if (length > charLimit * 0.9) {
+                counter.classList.add('warning');
+                counter.classList.remove('danger');
+            } else {
+                counter.classList.remove('warning', 'danger');
+            }
+            
+            updateTransformButton();
+        }
+
+
+function updateTransformButton() {
+            const btn = document.getElementById('transformBtn');
+            const input = document.getElementById('inputText');
+            
+            if (selectedTransformation && input.value.trim() && input.value.length <= charLimit && transformationsRemaining > 0) {
+                btn.disabled = false;
+            } else {
+                btn.disabled = true;
+            }
+        }
+        
+        function showAlert(message, type = 'info') {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show`;
+            alert.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            container.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+        
+        function updateRateLimitDisplay() {
+            const counter = document.getElementById('rateLimitCounter');
+            const box = document.getElementById('rateLimitBox');
+            
+            counter.textContent = `${transformationsRemaining} / ${totalTransformations}`;
+            
+            if (transformationsRemaining === 0) {
+                box.style.background = 'linear-gradient(135deg, #f56565, #e53e3e)';
+                showAlert('⚠️ <strong>Limite atingido!</strong> Já utilizou as suas 3 transformações gratuitas. <a href="/login" class="alert-link">Faça login</a> para transformações ilimitadas!', 'danger');
+            } else if (transformationsRemaining === 1) {
+                box.style.background = 'linear-gradient(135deg, #f6ad55, #ed8936)';
+                showAlert('⚠️ <strong>Última transformação disponível!</strong> Registe-se para acesso ilimitado.', 'warning');
+            }
+            
+            updateTransformButton();
+        }
+        
+        async function transformText() {
+            const input = document.getElementById('inputText').value;
+            const output = document.getElementById('outputText');
+            const btn = document.getElementById('transformBtn');
+            
+            if (!selectedTransformation) {
+                showAlert('Por favor, selecione uma transformação primeiro.', 'warning');
+                return;
+            }
+            
+            if (!input.trim()) {
+                showAlert('Por favor, insira algum texto para transformar.', 'warning');
+                return;
+            }
+            
+            if (input.length > charLimit) {
+                showAlert(`O texto excede o limite de ${charLimit} caracteres. Registe-se para até 50.000 caracteres!`, 'danger');
+                return;
+            }
+            
+            if (transformationsRemaining <= 0) {
+                showAlert('Limite de transformações atingido! Faça login para transformações ilimitadas.', 'danger');
+                return;
+            }
+            
+            // Loading state
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Transformando...';
+            output.value = '';
+            
+            try {
+                const response = await fetch('/apps/text-transformer/api/public/transform', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: input,
+                        transformation: selectedTransformation
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    output.value = data.result;
+                    document.getElementById('outputCharCounter').textContent = `${data.result.length} caracteres`;
+                    
+                    // Update stats
+                    displayStats(data.stats);
+                    
+                    // Update rate limit
+                    transformationsRemaining = data.remaining_transformations;
+                    updateRateLimitDisplay();
+                    
+                    // Enable copy button
+                    document.getElementById('copyBtn').disabled = false;
+                    
+                    showAlert('✅ Texto transformado com sucesso!', 'success');
+                } else {
+                    showAlert(data.error || 'Erro ao transformar texto.', 'danger');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Erro ao comunicar com o servidor.', 'danger');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-magic"></i> Transformar Texto';
+                updateTransformButton();
+            }
+        }
+        
+        function displayStats(stats) {
+            const statsBox = document.getElementById('statsBox');
+            const statsGrid = document.getElementById('statsGrid');
+            
+            statsGrid.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-value">${stats.characters}</div>
+                    <div class="stat-label">Caracteres</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.characters_no_spaces}</div>
+                    <div class="stat-label">Sem Espaços</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.words}</div>
+                    <div class="stat-label">Palavras</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.lines}</div>
+                    <div class="stat-label">Linhas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.sentences}</div>
+                    <div class="stat-label">Frases</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.reading_time} min</div>
+                    <div class="stat-label">Tempo Leitura</div>
+                </div>
+            `;
+            
+            statsBox.style.display = 'block';
+        }
+        
+        function clearAll() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('outputText').value = '';
+            document.getElementById('charCounter').textContent = `0 / ${charLimit} caracteres`;
+            document.getElementById('outputCharCounter').textContent = '0 caracteres';
+            document.getElementById('statsBox').style.display = 'none';
+            document.getElementById('copyBtn').disabled = true;
+            
+            // Remover seleção
+            document.querySelectorAll('.transform-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            selectedTransformation = null;
+            
+            updateTransformButton();
+        }
+        
+        function copyToClipboard() {
+            const output = document.getElementById('outputText');
+            output.select();
+            document.execCommand('copy');
+            
+            const btn = document.getElementById('copyBtn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+            }, 2000);
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + Enter para transformar
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                if (!document.getElementById('transformBtn').disabled) {
+                    transformText();
+                }
+            }
+            
+            // Ctrl/Cmd + K para limpar
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                clearAll();
+            }
+        });
+        
+        // Initialize
+        updateCharCounter();
+        updateTransformButton();
+    </script>
+</body>
+</html>

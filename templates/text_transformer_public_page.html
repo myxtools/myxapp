@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ current_transformation.name }} - Text Transformer (Público)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .top-navbar {
+            background: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .top-navbar .nav-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .transformation-dropdown {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+        
+        .dropdown-button {
+            width: 100%;
+            background: white;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .main-container {
+            padding: 0 0 2rem 0;
+        }
+        
+        .page-header {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .page-header h1 {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .public-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #333;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .tool-icon-large {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .rate-limit-box {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .rate-limit-counter {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .upgrade-cta {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .upgrade-cta .btn {
+            background: white;
+            color: var(--primary-color);
+            font-weight: bold;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .text-areas {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .text-areas {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .text-box {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .text-box label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+        }
+        
+        .text-box textarea {
+            flex: 1;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 350px;
+        }
+        
+        .text-box textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .char-counter {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-top: 0.5rem;
+        }
+        
+        .char-counter.warning {
+            color: #f6ad55;
+            font-weight: bold;
+        }
+        
+        .char-counter.danger {
+            color: #f56565;
+            font-weight: bold;
+        }
+        
+        .watermark-notice {
+            background: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .stats-box {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 6px;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-top: 0.25rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-transform {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-transform:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-transform:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #2d3748;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+        
+        .alert {
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .spinner-border {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-width: 0.2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <div class="top-navbar">
+        <div class="container">
+            <div class="nav-links">
+                <a href="{{ url_for('text_transformer.public_hub') }}" class="nav-btn">
+                    <i class="fas fa-home"></i> Hub
+                </a>
+                
+                <div class="transformation-dropdown">
+                    <select class="form-select dropdown-button" onchange="window.location.href=this.value">
+                        <option value="">🔧 Escolher Transformação...</option>
+                        {% for key, trans in available_transformations.items() %}
+                        <option value="{{ url_for('text_transformer.public_transformation', transformation_type=key) }}" 
+                                {% if key == transformation_type %}selected{% endif %}>
+                            {{ trans.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <a href="/login" class="nav-btn">
+                    <i class="fas fa-unlock"></i> Login
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container main-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="text-center">
+                <span class="public-badge">
+                    <i class="fas fa-globe"></i> VERSÃO PÚBLICA
+                </span>
+                <div class="tool-icon-large mx-auto">
+                    <i class="{{ icon }}"></i>
+                </div>
+                <h1>{{ current_transformation.name }}</h1>
+                <p class="lead mb-0">{{ current_transformation.description }}</p>
+                <div class="mt-2">
+                    <span class="badge bg-secondary">Exemplo: {{ current_transformation.example }}</span>
+                </div>
+            </div>
+            
+            <!-- Rate Limit -->
+            <div class="rate-limit-box" id="rateLimitBox">
+                <div>
+                    <i class="fas fa-clock fa-2x"></i>
+                </div>
+                <div class="text-center flex-grow-1">
+                    <div style="font-size: 0.9rem;">Transformações Restantes:</div>
+                    <div class="rate-limit-counter" id="rateLimitCounter">
+                        {{ transformations_remaining }} / {{ total_transformations }}
+                    </div>
+                </div>
+                <div style="font-size: 0.85rem;">
+                    <i class="fas fa-sync-alt"></i> Reset 1h
+                </div>
+            </div>
+            
+            <!-- Upgrade CTA -->
+            <div class="upgrade-cta">
+                <strong>🚀 Upgrade para Premium:</strong> 18 ferramentas, 50k caracteres, ilimitado, sem watermark!
+                <a href="/login" class="btn">
+                    <i class="fas fa-crown"></i> Registar Grátis
+                </a>
+            </div>
+        </div>
+        
+        <!-- Content -->
+        <div class="content-section">
+            <!-- Alerts -->
+            <div id="alertContainer"></div>
+            
+            <!-- Text Areas -->
+            <div class="text-areas">
+                <!-- Input -->
+                <div class="text-box">
+                    <label for="inputText">
+                        <i class="fas fa-edit"></i> Texto Original
+                    </label>
+                    <textarea id="inputText" placeholder="Cole ou escreva o seu texto aqui..." oninput="updateCharCounter()"></textarea>
+                    <div class="char-counter" id="charCounter">0 / {{ char_limit }} caracteres</div>
+                    <div class="watermark-notice">
+                        <i class="fas fa-info-circle"></i> <strong>Nota:</strong> O resultado incluirá a assinatura "✨ Processado com MyXAPP Text Transformer"
+                    </div>
+                </div>
+                
+                <!-- Output -->
+                <div class="text-box">
+                    <label for="outputText">
+                        <i class="fas fa-check-circle"></i> Texto Transformado
+                    </label>
+                    <textarea id="outputText" placeholder="O resultado aparecerá aqui..." readonly></textarea>
+                    <div class="char-counter" id="outputCharCounter">0 caracteres</div>
+                    
+                    <!-- Stats -->
+                    <div class="stats-box" id="statsBox">
+                        <strong><i class="fas fa-chart-bar"></i> Estatísticas:</strong>
+                        <div class="stats-grid" id="statsGrid"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn-transform" onclick="transformText()" id="transformBtn" disabled>
+                    <i class="fas fa-magic"></i> Transformar Texto
+                </button>
+                <button class="btn-secondary" onclick="clearAll()">
+                    <i class="fas fa-eraser"></i> Limpar Tudo
+                </button>
+                <button class="btn-secondary" onclick="copyToClipboard()" id="copyBtn" disabled>
+                    <i class="fas fa-copy"></i> Copiar Resultado
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const transformationType = '{{ transformation_type }}';
+        const charLimit = {{ char_limit }};
+        let transformationsRemaining = {{ transformations_remaining }};
+        const totalTransformations = {{ total_transformations }};
+        
+        function updateCharCounter() {
+            const input = document.getElementById('inputText');
+            const counter = document.getElementById('charCounter');
+            const length = input.value.length;
+            
+            counter.textContent = `${length} / ${charLimit} caracteres`;
+            
+            if (length > charLimit) {
+                counter.classList.add('danger');
+                counter.classList.remove('warning');
+            } else if (length > charLimit * 0.9) {
+                counter.classList.add('warning');
+                counter.classList.remove('danger');
+            } else {
+                counter.classList.remove('warning', 'danger');
+            }
+            
+            updateTransformButton();
+        }
+        
+        function updateTransformButton() {
+            const btn = document.getElementById('transformBtn');
+            const input = document.getElementById('inputText');
+            
+            if (input.value.trim() && input.value.length <= charLimit && transformationsRemaining > 0) {
+                btn.disabled = false;
+            } else {
+                btn.disabled = true;
+            }
+        }
+        
+        function updateRateLimitDisplay() {
+            const counter = document.getElementById('rateLimitCounter');
+            const box = document.getElementById('rateLimitBox');
+            
+            counter.textContent = `${transformationsRemaining} / ${totalTransformations}`;
+            
+            if (transformationsRemaining === 0) {
+                box.style.background = 'linear-gradient(135deg, #f56565, #e53e3e)';
+                showAlert('⚠️ Limite atingido! <a href="/login" class="alert-link">Registe-se</a> para transformações ilimitadas!', 'danger');
+            } else if (transformationsRemaining === 1) {
+                box.style.background = 'linear-gradient(135deg, #f6ad55, #ed8936)';
+            }
+            
+            updateTransformButton();
+        }
+        
+        function showAlert(message, type = 'info') {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show`;
+            alert.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            container.appendChild(alert);
+            
+            setTimeout(() => alert.remove(), 5000);
+        }
+        
+        async function transformText() {
+            const input = document.getElementById('inputText').value;
+            const output = document.getElementById('outputText');
+            const btn = document.getElementById('transformBtn');
+            
+            if (!input.trim()) {
+                showAlert('Por favor, insira algum texto.', 'warning');
+                return;
+            }
+            
+            if (input.length > charLimit) {
+                showAlert(`Texto excede ${charLimit} caracteres.`, 'danger');
+                return;
+            }
+            
+            if (transformationsRemaining <= 0) {
+                showAlert('Limite atingido! <a href="/login" class="alert-link">Registe-se</a> para continuar.', 'danger');
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Transformando...';
+            output.value = '';
+            
+            try {
+                const response = await fetch('/apps/text-transformer/api/public/transform', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text: input,
+                        transformation: transformationType
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    output.value = data.result;
+                    document.getElementById('outputCharCounter').textContent = `${data.result.length} caracteres`;
+                    displayStats(data.stats);
+                    
+                    transformationsRemaining = data.remaining_transformations;
+                    updateRateLimitDisplay();
+                    
+                    document.getElementById('copyBtn').disabled = false;
+                    
+                    showAlert('✅ Transformação concluída!', 'success');
+                } else {
+                    showAlert(data.error || 'Erro ao transformar.', 'danger');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Erro ao comunicar com o servidor.', 'danger');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-magic"></i> Transformar Texto';
+                updateTransformButton();
+            }
+        }
+        
+        function displayStats(stats) {
+            const statsBox = document.getElementById('statsBox');
+            const statsGrid = document.getElementById('statsGrid');
+            
+            statsGrid.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-value">${stats.characters}</div>
+                    <div class="stat-label">Caracteres</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.characters_no_spaces}</div>
+                    <div class="stat-label">Sem Espaços</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.words}</div>
+                    <div class="stat-label">Palavras</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.lines}</div>
+                    <div class="stat-label">Linhas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.sentences}</div>
+                    <div class="stat-label">Frases</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${stats.reading_time} min</div>
+                    <div class="stat-label">Leitura</div>
+                </div>
+            `;
+            
+            statsBox.style.display = 'block';
+        }
+        
+        function clearAll() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('outputText').value = '';
+            document.getElementById('charCounter').textContent = `0 / ${charLimit} caracteres`;
+            document.getElementById('outputCharCounter').textContent = '0 caracteres';
+            document.getElementById('statsBox').style.display = 'none';
+            document.getElementById('copyBtn').disabled = true;
+            updateTransformButton();
+        }
+        
+        function copyToClipboard() {
+            const output = document.getElementById('outputText');
+            output.select();
+            document.execCommand('copy');
+            showAlert('Texto copiado!', 'success');
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                if (!document.getElementById('transformBtn').disabled) {
+                    transformText();
+                }
+            }
+            
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                clearAll();
+            }
+        });
+        
+        // Initialize
+        updateCharCounter();
+    </script>
+</body>
+</html>

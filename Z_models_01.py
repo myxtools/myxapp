@@ -125,30 +125,3 @@ class EmailResult(db.Model):
     
     def __repr__(self):
         return f'<EmailResult {self.email} - Valid:{self.is_valid}>'
-# ============================================
-# TABELAS DO TEXT TRANSFORMER
-# ============================================
-
-class TextTransformation(db.Model):
-    """Histórico de transformações de texto"""
-    __tablename__ = 'text_transformations'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    
-    # Tipo de transformação
-    transformation_type = db.Column(db.String(50), nullable=False)
-    
-    # Textos (limitados para não sobrecarregar BD)
-    original_text = db.Column(db.Text, nullable=False)
-    result_text = db.Column(db.Text, nullable=False)
-    
-    # Metadados
-    char_count = db.Column(db.Integer, default=0)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
-    # Relacionamento
-    user = db.relationship('User', backref=db.backref('text_transformations', lazy=True))
-    
-    def __repr__(self):
-        return f'<TextTransformation {self.id} - User:{self.user_id} Type:{self.transformation_type}>'

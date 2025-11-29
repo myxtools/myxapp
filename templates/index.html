@@ -1,7 +1,5 @@
 {% extends "base.html" %}
-
 {% block title %}Bem-vindo - MyXAPP{% endblock %}
-
 {% block content %}
 <div class="row justify-content-center mt-5">
     <div class="col-md-8 text-center">
@@ -9,6 +7,37 @@
         <p class="lead mb-4">
             Plataforma modular de aplicações com gestão centralizada de utilizadores e permissões.
         </p>
+        
+        <!-- NOVO: Banner Text Transformer -->
+        <div class="card mb-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);">
+            <div class="card-body p-4" style="color: white;">
+                <div class="row align-items-center">
+                    <div class="col-md-8 text-start">
+                        <h3 class="mb-3">
+                            <i class="fas fa-magic"></i> Text Transformer
+                            <span class="badge" style="background: linear-gradient(135deg, #ffd700, #ffed4e); color: #333; font-size: 0.6em; margin-left: 0.5rem;">GRÁTIS</span>
+                        </h3>
+                        <p class="mb-2" style="font-size: 1.1rem;">
+                            Transforme textos instantaneamente com 4 ferramentas básicas!
+                        </p>
+                        <ul class="list-unstyled mb-0" style="font-size: 0.95rem; opacity: 0.95;">
+                            <li><i class="fas fa-check-circle"></i> MAIÚSCULAS / minúsculas</li>
+                            <li><i class="fas fa-check-circle"></i> Capitalizar / Title Case</li>
+                            <li><i class="fas fa-check-circle"></i> Sem registo necessário</li>
+                            <li><i class="fas fa-check-circle"></i> 3 transformações grátis por hora</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 text-center mt-3 mt-md-0">
+                        <a href="/apps/text-transformer/public" class="btn btn-light btn-lg" style="font-weight: bold; padding: 1rem 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                            <i class="fas fa-rocket"></i> Experimentar Agora
+                        </a>
+                        <p class="mt-3 mb-0" style="font-size: 0.85rem;">
+                            <a href="{{ url_for('auth.register') }}" style="color: #ffd700; text-decoration: underline;">Registe-se</a> para 18 ferramentas + ilimitado!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <div class="row mt-5">
             <div class="col-md-4 mb-3">
@@ -22,7 +51,7 @@
             <div class="col-md-4 mb-3">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">🎯 Apps Modulares</h5>
+                        <h5 class="card-title">🧩 Apps Modulares</h5>
                         <p class="card-text">Acesso a múltiplas aplicações com um único login.</p>
                     </div>
                 </div>
@@ -36,7 +65,6 @@
                 </div>
             </div>
         </div>
-
         <div class="mt-5">
             <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg me-3">Login</a>
             <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary btn-lg">Registar</a>

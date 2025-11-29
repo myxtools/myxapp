@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Transformer - Versão Pública</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #667eea; --secondary: #764ba2; }
+        body { background: linear-gradient(135deg, var(--primary), var(--secondary)); min-height: 100vh; padding: 2rem 0; }
+        .card { box-shadow: 0 10px 30px rgba(0,0,0,0.2); border-radius: 15px; }
+        .badge-public { background: linear-gradient(135deg, #ffd700, #ffed4e); color: #333; padding: 0.5rem 1rem; border-radius: 25px; font-weight: bold; }
+        .tool-card { border: 2px solid #e2e8f0; padding: 1.5rem; border-radius: 12px; transition: all 0.3s; text-decoration: none; color: inherit; display: block; background: white; }
+        .tool-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(102,126,234,0.3); border-color: var(--primary); }
+        .tool-icon { width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card bg-white p-4 mb-4">
+            <div class="text-center">
+                <span class="badge-public"><i class="fas fa-globe"></i> VERSÃO PÚBLICA</span>
+                <h1 class="fw-bold" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    <i class="fas fa-magic"></i> Text Transformer
+                </h1>
+                <p class="lead">4 Ferramentas Básicas de Transformação de Texto</p>
+            </div>
+            
+            <div class="alert alert-success mt-3">
+                <strong><i class="fas fa-clock"></i> Transformações Restantes:</strong>
+                <span class="badge bg-success ms-2">{{ transformations_remaining }} / {{ total_transformations }}</span>
+                <small class="ms-3"><i class="fas fa-sync-alt"></i> Resetam a cada hora</small>
+            </div>
+            
+            <div class="alert alert-info mt-2">
+                <strong>🚀 Upgrade para Premium:</strong> 18 ferramentas | 50.000 caracteres | Ilimitado | Sem watermark | Histórico
+                <a href="/login" class="btn btn-sm btn-primary ms-3"><i class="fas fa-unlock"></i> Registar Grátis</a>
+            </div>
+        </div>
+        
+        <div class="card bg-white p-4">
+            <h3 class="mb-4"><i class="fas fa-tools"></i> Escolha uma Ferramenta</h3>
+            
+            {% for category, tools in categories.items() %}
+            <div class="mb-4">
+                <h5 class="text-secondary"><i class="fas fa-folder"></i> {{ category }}</h5>
+                <div class="row g-3">
+                    {% for tool in tools %}
+                    <div class="col-md-6">
+                        <a href="{{ url_for('text_transformer.public_transformation', transformation_type=tool.key) }}" class="tool-card">
+                            <div class="tool-icon"><i class="{{ tool.icon }}"></i></div>
+                            <h5>{{ tool.name }}</h5>
+                            <p class="text-muted mb-2">{{ tool.description }}</p>
+                            <small class="text-secondary"><code>{{ tool.example }}</code></small>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

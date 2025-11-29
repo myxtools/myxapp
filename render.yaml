@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: myxapp
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn app:app"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: myxapp-db
+          property: connectionString
+
+databases:
+  - name: myxapp-db
+    databaseName: myxapp
+    user: myxapp
+```
+
+---
+
+### **4. Atualizar `.gitignore`**
+
+Adiciona estas linhas ao ficheiro `D:\Software\myxapp\.gitignore` (no final):
+```
+# Render
+.render-buildpacks.json
