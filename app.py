@@ -82,7 +82,6 @@ def init_database_route():
             email_app = App(
                 name='Email Validator',
                 description='Validação e verificação de emails',
-                icon='fa-envelope',
                 route='/apps/email-validator'
             )
             db.session.add(email_app)
@@ -94,7 +93,6 @@ def init_database_route():
             text_app = App(
                 name='Text Transformer',
                 description='Transforme textos com 18 ferramentas profissionais',
-                icon='fa-magic',
                 route='/apps/text-transformer'
             )
             db.session.add(text_app)
@@ -179,7 +177,6 @@ def init_db():
             email_app = App(
                 name='Email Validator',
                 description='Validação e verificação de emails',
-                icon='fa-envelope',
                 route='/apps/email-validator'
             )
             db.session.add(email_app)
@@ -190,7 +187,6 @@ def init_db():
             text_app = App(
                 name='Text Transformer',
                 description='Transformação e análise de texto com múltiplas ferramentas',
-                icon='fa-magic',
                 route='/apps/text-transformer'
             )
             db.session.add(text_app)
